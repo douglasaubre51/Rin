@@ -7,51 +7,51 @@
     x:DataType="pagemodels:MainPageModel"
     Shell.NavBarIsVisible="False">
 
-    <ScrollView Margin="20,40" Orientation="Vertical">
-        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto">
+    <ScrollView Margin="15,40" Orientation="Vertical">
+        <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
             <Grid.Resources>
                 <Style x:Key="SetterBtn" TargetType="Button">
                     <Setter Property="HeightRequest" Value="20" />
-                    <Setter Property="Margin" Value="0,4,0,20" />
                     <Setter Property="BackgroundColor" Value="White" />
                     <Setter Property="BorderColor" Value="{StaticResource Primary}" />
                     <Setter Property="BorderWidth" Value="1" />
                     <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                </Style>
+
+                <Style x:Key="EntryLabels" TargetType="Label">
+                    <Setter Property="TextColor" Value="Grey" />
                 </Style>
             </Grid.Resources>
 
             <!--  title  -->
             <Label
                 Grid.Row="0"
-                Margin="0,0,0,20"
+                Margin="0,0,0,40"
                 FontSize="32"
                 Text="Find distance" />
 
             <!--  first location group  -->
-            <Label
+            <VerticalStackLayout
                 Grid.Row="1"
-                FontSize="Subtitle"
-                Text="First location" />
-            <Button
-                Grid.Row="2"
-                Command="{Binding SetFirstLocationCommand}"
-                Style="{StaticResource SetterBtn}"
-                Text="Map" />
+                Margin="0,0,0,40"
+                Spacing="4">
+                <SearchBar
+                    x:Name="SearchBarFirst"
+                    Placeholder="First location"
+                    TextChanged="SearchBarFirst_TextChanged" />
+            </VerticalStackLayout>
 
             <!--  second location group  -->
-            <Label
-                Grid.Row="3"
-                FontSize="Subtitle"
-                Text="Second location" />
-            <Button
-                Grid.Row="4"
-                Command="{Binding SetSecondLocationCommand}"
-                Style="{StaticResource SetterBtn}"
-                Text="Map" />
+            <VerticalStackLayout Grid.Row="2" Spacing="4">
+                <SearchBar
+                    x:Name="SearchBarSecond"
+                    Placeholder="Second location"
+                    TextChanged="SearchBarSecond_TextChanged" />
+            </VerticalStackLayout>
 
             <!--  calc distance btn  -->
             <Button
-                Grid.Row="5"
+                Grid.Row="6"
                 Command="{Binding FindDistanceBetweenCommand}"
                 Text="Find"
                 VerticalOptions="End" />

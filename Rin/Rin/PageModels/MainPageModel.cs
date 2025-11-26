@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MvvmHelpers;
 using System.Diagnostics;
@@ -8,9 +10,7 @@ namespace Rin.PageModels;
 public partial class MainPageModel : BasePageModel
 {
     [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(IsFirstBtnNotBusy))]
-    private bool isFirstBtnBusy;
-    public bool IsFirstBtnNotBusy => !IsFirstBtnBusy;
+    private bool initialLoad = false;
 
     [ObservableProperty]
     private string firstLocationName = string.Empty;
@@ -24,6 +24,15 @@ public partial class MainPageModel : BasePageModel
     private ObservableRangeCollection<Location> locationsFirst = [];
     [ObservableProperty]
     private ObservableRangeCollection<Location> locationsSecond = [];
+
+    private async Task ShowWarningToast(string msg)
+    {
+        var toast = Toast.Make(
+            msg,
+            ToastDuration.Short,
+            14);
+        await toast.Show();
+    }
 
     private Location? GetLatitudeAndLongitude(IEnumerable<Location> locations)
     {
@@ -51,7 +60,9 @@ public partial class MainPageModel : BasePageModel
             Location? firstLocation = GetLatitudeAndLongitude(locations);
             if (firstLocation is null)
             {
-                Debug.WriteLine($"First location doesn't exist in map!");
+                string msg = "First location doesn't exist in map !";
+                Debug.WriteLine(msg);
+                await ShowWarningToast(msg);
                 return;
             }
 
@@ -59,7 +70,9 @@ public partial class MainPageModel : BasePageModel
             Location? secondLocation = GetLatitudeAndLongitude(locations);
             if (secondLocation is null)
             {
-                Debug.WriteLine($"Second location doesn't exist in map!");
+                string msg = "Second location doesn't exist in map !";
+                Debug.WriteLine(msg);
+                await ShowWarningToast(msg);
                 return;
             }
 
@@ -67,15 +80,14 @@ public partial class MainPageModel : BasePageModel
                 firstLocation,
                 secondLocation,
                 DistanceUnits.Kilometers);
+
+            InitialLoad = true;
             TotalDistance = distance.ToString("#.##");
-            await Shell.Current.DisplayAlertAsync(
-                "Result",
-                $"Distance between {FirstLocationName} and {SecondLocationName} : {TotalDistance} km",
-                "Thanks");
         }
         catch (Exception ex)
         {
             Debug.WriteLine("FindDistanceBetween error: " + ex.Message);
+            await ShowWarningToast("Enter all fields !");
         }
     }
 }

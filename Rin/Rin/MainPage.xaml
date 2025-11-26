@@ -10,12 +10,12 @@
     <ScrollView Margin="15,40" Orientation="Vertical">
         <Grid RowDefinitions="Auto,Auto,Auto,*,Auto">
             <Grid.Resources>
-                <Style x:Key="SetterBtn" TargetType="Button">
-                    <Setter Property="HeightRequest" Value="20" />
-                    <Setter Property="BackgroundColor" Value="White" />
-                    <Setter Property="BorderColor" Value="{StaticResource Primary}" />
-                    <Setter Property="BorderWidth" Value="1" />
+                <Style x:Key="ResultLabel" TargetType="Label">
                     <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                    <Setter Property="FontSize" Value="70" />
+                    <Setter Property="TextColor" Value="{StaticResource Primary}" />
+                    <Setter Property="VerticalOptions" Value="Center" />
+                    <Setter Property="HorizontalOptions" Value="Center" />
                 </Style>
 
                 <Style x:Key="EntryLabels" TargetType="Label">
@@ -49,9 +49,16 @@
                     TextChanged="SearchBarSecond_TextChanged" />
             </VerticalStackLayout>
 
+            <!--  result  -->
+            <Label
+                Grid.Row="3"
+                IsVisible="{Binding InitialLoad}"
+                Style="{StaticResource ResultLabel}"
+                Text="{Binding TotalDistance, StringFormat='{0} Km'}" />
+
             <!--  calc distance btn  -->
             <Button
-                Grid.Row="6"
+                Grid.Row="4"
                 Command="{Binding FindDistanceBetweenCommand}"
                 Text="Find"
                 VerticalOptions="End" />
